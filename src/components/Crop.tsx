@@ -1,0 +1,216 @@
+import * as React from "react";
+import {
+  useDrawCrop,
+  useFireCallbacks,
+  useMoveCrop,
+  useResizeCrop
+} from "../hooks";
+import { INITIAL_STATE, mainReducer } from "../reducers";
+import { AspectRatio, CropValue, Directions, Status } from "../types";
+import { arePassiveListenersSupported, getCropStyle } from "../utils";
+
+const DIRECTIONS = [
+  Directions.North,
+  Directions.NorthEast,
+  Directions.East,
+  Directions.SouthEast,
+  Directions.South,
+  Directions.SouthWest,
+  Directions.West,
+  Directions.NorthWest
+];
+
+export interface CropProps {
+  alt?: string;
+  aspectRatio?: AspectRatio;
+  className?: string;
+  crossOrigin?: "anonymous" | "use-credentials";
+  src?: string;
+  value: CropValue;
+  onChange: (crop: CropValue) => void;
+  onComplete?: () => void;
+  onStart?: () => void;
+}
+
+export const Crop = React.forwardRef<HTMLImageElement, CropProps>(
+  (
+    {
+      alt = "",
+      aspectRatio,
+      className,
+      crossOrigin = "anonymous",
+      onChange,
+      onComplete,
+      onStart,
+      src = "",
+      value
+    },
+    innerRef
+  ): React.ReactElement => {
+    const imageRef = React.useRef<HTMLImageElement>(null);
+    const [state, dispatch] = React.useReducer(mainReducer, INITIAL_STATE);
+
+    const { status } = state;
+    const { height, width } = value;
+
+    const [startDraw, updateDraw, finishDraw] = useDrawCrop(
+      dispatch,
+      onChange,
+      value,
+      state,
+      aspectRatio
+    );
+    const [
+      startMoveByKeyboard,
+      updateMoveByMouse,
+      finishMoveByKeyboard,
+      startMoveOnKeyDown,
+      finishMoveOnKeyUp
+    ] = useMoveCrop(dispatch, onChange, value, state);
+    const [startResize, updateResize, finishResize] = useResizeCrop(
+      dispatch,
+      onChange,
+      value,
+      state,
+      aspectRatio
+    );
+
+    useFireCallbacks({ onComplete, onStart }, status, imageRef);
+
+    const customClassName = `ReactSimpleCrop ${className}`;
+    const showCrop = height > 0 && width > 0;
+
+    const handleContainerMouseMove = (
+      event: React.MouseEvent | React.TouchEvent | TouchEvent
+    ): void => {
+      event.preventDefault();
+
+      if (!imageRef.current) {
+        return;
+      }
+
+      if (status === Status.Drawing) {
+        updateDraw(event, imageRef.current);
+      } else if (status === Status.MovingByMouse) {
+        updateMoveByMouse(event, imageRef.current);
+      } else if (status === Status.Resizing) {
+        updateResize(event, imageRef.current);
+      }
+    };
+
+    const handleContainerMouseUp = (): void => {
+      if (status === Status.Drawing) {
+        finishDraw();
+      } else if (status === Status.MovingByMouse) {
+        finishMoveByKeyboard();
+      } else if (status === Status.Resizing) {
+        finishResize();
+      }
+    };
+
+    const handleCropKeyUp = (
+      event: React.KeyboardEvent<HTMLDivElement>
+    ): void => {
+      finishMoveOnKeyUp(event);
+    };
+
+    const handleCropKeyDown = (
+      event: React.KeyboardEvent<HTMLDivElement>
+    ): void => {
+      // Prevent scroll on key press.
+      event.preventDefault();
+
+      startMoveOnKeyDown(event);
+    };
+
+    const handleImageMouseDown = (
+      event: React.MouseEvent | React.TouchEvent
+    ): void => {
+      if (!imageRef.current) {
+        return;
+      }
+
+      startDraw(event, imageRef.current);
+    };
+
+    const handleCropMouseDown = (
+      event: React.MouseEvent | React.TouchEvent
+    ): void => {
+      if (!imageRef.current) {
+        return;
+      }
+
+      startMoveByKeyboard(event, imageRef.current);
+    };
+
+    React.useEffect((): (() => void) => {
+      const supportsPassive = arePassiveListenersSupported();
+
+      const options = supportsPassive ? { passive: false } : false;
+
+      if (imageRef.current) {
+        imageRef.current.addEventListener(
+          "touchmove",
+          handleContainerMouseMove,
+          options
+        );
+      }
+
+      return (): void => {
+        if (imageRef.current) {
+          imageRef.current.removeEventListener(
+            "touchmove",
+            handleContainerMouseMove
+          );
+        }
+      };
+    }, []);
+
+    return (
+      <div
+        className={customClassName}
+        onMouseMove={handleContainerMouseMove}
+        onMouseUp={handleContainerMouseUp}
+        onTouchEnd={handleContainerMouseUp}
+        onTouchMove={handleContainerMouseMove}
+      >
+        <div className="ReactSimpleCrop__container" ref={imageRef}>
+          {showCrop ? (
+            <div
+              className="ReactSimpleCrop__crop"
+              onKeyDown={handleCropKeyDown}
+              onKeyUp={handleCropKeyUp}
+              onMouseDown={handleCropMouseDown}
+              onTouchStart={handleCropMouseDown}
+              style={getCropStyle(value)}
+              tabIndex={1}
+            >
+              {DIRECTIONS.map((direction, i): React.ReactElement | null =>
+                !aspectRatio || i % 2 !== 0 ? (
+                  <div
+                    className={`ReactSimpleCrop__handle ReactSimpleCrop__handle--${direction}`}
+                    id={direction}
+                    key={direction}
+                    onMouseDown={startResize}
+                    onTouchStart={startResize}
+                  />
+                ) : null
+              )}
+            </div>
+          ) : null}
+          <img
+            alt={alt}
+            className="ReactSimpleCrop__image"
+            crossOrigin={crossOrigin}
+            onMouseDown={handleImageMouseDown}
+            onTouchStart={handleImageMouseDown}
+            ref={innerRef}
+            src={src}
+          />
+        </div>
+      </div>
+    );
+  }
+);
+
+Crop.displayName = "Crop";

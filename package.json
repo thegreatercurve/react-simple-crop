@@ -1,0 +1,55 @@
+{
+  "name": "react-simple-crop",
+  "version": "0.0.1",
+  "description": "A simple and light-weight library of React components for cropping images",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "npm run clean && npx webpack --mode production",
+    "clean": "rm -rf './dist'",
+    "dev": "npm run clean && npx webpack --mode development",
+    "format": "npx prettier --write './{demo,src}/**/*.{ts,tsx,js,jsx}'",
+    "format:check": "npx prettier --check './{demo,src}/**/*.{ts,tsx,js,jsx}'",
+    "lint": "npx eslint './{demo,src}/**/*.{ts,tsx,js,jsx}'",
+    "test": "npx jest"
+  },
+  "files": [
+    "/dist"
+  ],
+  "keywords": [],
+  "author": "John Flockton",
+  "license": "MIT",
+  "repository": "https://github.com/thegreatercurve/react-simple-crop",
+  "devDependencies": {
+    "@types/jest": "^24.0.11",
+    "@types/react": "^16.8.12",
+    "@types/react-dom": "^16.8.4",
+    "@typescript-eslint/eslint-plugin": "^1.9.0",
+    "@typescript-eslint/parser": "^1.9.0",
+    "copy-webpack-plugin": "^5.0.3",
+    "css-loader": "^2.1.1",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.13.0",
+    "jest": "^24.7.1",
+    "mini-css-extract-plugin": "^0.7.0",
+    "node-sass": "^4.12.0",
+    "prettier": "^1.16.4",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
+    "ts-jest": "^24.0.1",
+    "ts-loader": "^6.0.2",
+    "typescript": "^3.4.1",
+    "webpack": "^4.33.0",
+    "webpack-cli": "^3.3.5"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
+  },
+  "peerDependencies": {
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  }
+}
