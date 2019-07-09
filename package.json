@@ -11,12 +11,19 @@
     "format": "npx prettier --write './{demo,src}/**/*.{ts,tsx,js,jsx}'",
     "format:check": "npx prettier --check './{demo,src}/**/*.{ts,tsx,js,jsx}'",
     "lint": "npx eslint './{demo,src}/**/*.{ts,tsx,js,jsx}'",
+    "prepare": "npm run build",
     "test": "npx jest"
   },
   "files": [
     "/dist"
   ],
-  "keywords": [],
+  "keywords": [
+    "react",
+    "typescript",
+    "image",
+    "photo",
+    "crop"
+  ],
   "author": "John Flockton",
   "license": "MIT",
   "repository": "https://github.com/thegreatercurve/react-simple-crop",
