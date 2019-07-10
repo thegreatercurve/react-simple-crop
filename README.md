@@ -139,5 +139,6 @@ Also accepts any HTML image attributes as props (i.e. `alt`, `crossOrigin` or `s
 ---
 ## TODO
 
-- [ ] Add maximum and minimum size constraints for crop. 
+- [ ] Add maximum and minimum size constraints for the crop area. 
+- [ ] Add support for maintaining the aspect ratio of the crop area on shift keydown. 
 - [ ] Add tests.
