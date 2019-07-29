@@ -34,7 +34,7 @@ module.exports = {
     alias: {
       react: path.resolve(__dirname, "./node_modules/react"),
       "react-dom": path.resolve(__dirname, "./node_modules/react-dom"),
-      "react-simple-crop": path.resolve(__dirname, "../dist")
+      "react-simple-crop": path.resolve(__dirname, "../")
     }
   }
 };
