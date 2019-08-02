@@ -25,6 +25,10 @@ export interface CropProps {
   aspectRatio?: AspectRatio;
   className?: string;
   crossOrigin?: "anonymous" | "use-credentials";
+  maxHeight?: number;
+  maxWidth?: number;
+  minHeight?: number;
+  minWidth?: number;
   src?: string;
   value: CropValue;
   onChange: (crop: CropValue) => void;
@@ -39,6 +43,10 @@ export const Crop = React.forwardRef<HTMLImageElement, CropProps>(
       aspectRatio,
       className,
       crossOrigin = "anonymous",
+      maxHeight,
+      maxWidth,
+      minHeight,
+      minWidth,
       onChange,
       onComplete,
       onStart,
@@ -51,13 +59,17 @@ export const Crop = React.forwardRef<HTMLImageElement, CropProps>(
     const [state, dispatch] = React.useReducer(mainReducer, INITIAL_STATE);
 
     const { status } = state;
+
     const { height, width } = value;
 
     const [startDraw, updateDraw, finishDraw] = useDrawCrop(
       dispatch,
       onChange,
-      value,
       state,
+      minWidth,
+      maxWidth,
+      minHeight,
+      maxHeight,
       aspectRatio
     );
     const [
@@ -72,13 +84,18 @@ export const Crop = React.forwardRef<HTMLImageElement, CropProps>(
       onChange,
       value,
       state,
+      minWidth,
+      maxWidth,
+      minHeight,
+      maxHeight,
       aspectRatio
     );
 
     useFireCallbacks({ onComplete, onStart }, status, imageRef);
 
     const customClassName = `ReactSimpleCrop ${className}`;
-    const showCrop = height > 0 && width > 0;
+
+    const showCrop = width > 0 || height > 0;
 
     const handleContainerMouseMove = (
       event: React.MouseEvent | React.TouchEvent | TouchEvent

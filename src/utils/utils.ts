@@ -22,6 +22,12 @@ export const arePassiveListenersSupported = (): boolean => {
   return false;
 };
 
+export const clamp = (
+  point: number,
+  min: number = 0,
+  max: number = 100
+): number => Math.min(Math.max(point, min), max);
+
 interface NearKeys {
   [key: string]: ArrowKeys[];
 }
@@ -134,6 +140,23 @@ export const getNewAspectRatio = (
   };
 };
 
+export const getRestrictedSizeCropValue = (
+  point: number,
+  origin: number,
+  minSize: number = 0,
+  maxSize: number = 100
+): number => {
+  if (point <= origin && origin - minSize < 0) {
+    return origin;
+  } else if (point >= origin && origin + minSize > 100) {
+    return origin - minSize;
+  }
+
+  const xClampWidth = clamp(point, origin - maxSize, origin - minSize);
+
+  return point < origin ? xClampWidth : origin;
+};
+
 export const getXPercent = (
   event: React.MouseEvent | React.TouchEvent | TouchEvent,
   { clientWidth, offsetLeft }: HTMLImageElement
@@ -181,9 +204,3 @@ export const isDirection = (str: string): str is Directions =>
   str === Directions.SouthWest ||
   str === Directions.West ||
   str === Directions.NorthWest;
-
-export const restrictPointToBounds = (
-  point: number,
-  min: number = 0,
-  max: number = 100
-): number => Math.min(Math.max(point, min), max);

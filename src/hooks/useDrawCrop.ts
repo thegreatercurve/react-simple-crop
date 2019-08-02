@@ -1,18 +1,22 @@
 import * as React from "react";
 import { State } from "../reducers";
-import { CropValue, DrawAction, DrawActionTypes, AspectRatio } from "../types";
+import { AspectRatio, CropValue, DrawAction, DrawActionTypes } from "../types";
 import {
+  clamp,
+  getNewAspectRatio,
+  getRestrictedSizeCropValue,
   getXPercent,
-  getYPercent,
-  restrictPointToBounds,
-  getNewAspectRatio
+  getYPercent
 } from "../utils";
 
 export const useDrawCrop = (
   dispatch: React.Dispatch<DrawAction>,
   onChange: (crop: CropValue) => void,
-  value: CropValue,
   state: State,
+  minWidth?: number,
+  maxWidth?: number,
+  minHeight?: number,
+  maxHeight?: number,
   aspectRatio?: AspectRatio
 ): [
   (
@@ -55,26 +59,46 @@ export const useDrawCrop = (
     event: React.MouseEvent | React.TouchEvent | TouchEvent,
     imageRef: HTMLImageElement
   ): void => {
-    const x = restrictPointToBounds(getXPercent(event, imageRef));
-    const y = restrictPointToBounds(getYPercent(event, imageRef));
+    const x = clamp(getXPercent(event, imageRef));
+    const y = clamp(getYPercent(event, imageRef));
 
-    const width = Math.abs(x0 - x);
-    const height = Math.abs(y0 - y);
+    let width = clamp(Math.abs(x0 - x), minWidth, maxWidth);
+    let height = clamp(Math.abs(y0 - y), minHeight, maxHeight);
 
-    if (aspectRatio) {
-      onChange(
-        getNewAspectRatio(aspectRatio, { height, width, x, y }, state, imageRef)
-      );
-
-      return;
-    }
-
-    onChange({
+    let cropValue = {
       height,
       width,
       x: x < x0 ? x : x0,
       y: y < y0 ? y : y0
-    });
+    };
+
+    if (aspectRatio) {
+      cropValue = {
+        ...cropValue,
+        ...getNewAspectRatio(
+          aspectRatio,
+          { height, width, x, y },
+          state,
+          imageRef
+        )
+      };
+    }
+
+    if (minWidth || maxWidth) {
+      cropValue = {
+        ...cropValue,
+        x: getRestrictedSizeCropValue(x, x0, minWidth, maxWidth)
+      };
+    }
+
+    if (minHeight || maxHeight) {
+      cropValue = {
+        ...cropValue,
+        y: getRestrictedSizeCropValue(y, y0, minHeight, maxHeight)
+      };
+    }
+
+    onChange(cropValue);
   };
 
   const finishDraw = (): void => {

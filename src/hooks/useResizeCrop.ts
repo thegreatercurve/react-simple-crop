@@ -1,18 +1,19 @@
 import * as React from "react";
 import { State } from "../reducers";
 import {
+  AspectRatio,
   CropValue,
   Directions,
   ResizeAction,
-  ResizeActionTypes,
-  AspectRatio
+  ResizeActionTypes
 } from "../types";
 import {
+  clamp,
+  getNewAspectRatio,
+  getRestrictedSizeCropValue,
   getXPercent,
   getYPercent,
-  isDirection,
-  restrictPointToBounds,
-  getNewAspectRatio
+  isDirection
 } from "../utils";
 
 interface OppositeDirectionMap {
@@ -40,6 +41,10 @@ export const useResizeCrop = (
   onChange: (crop: CropValue) => void,
   value: CropValue,
   state: State,
+  minWidth?: number,
+  maxWidth?: number,
+  minHeight?: number,
+  maxHeight?: number,
   aspectRatio?: AspectRatio
 ): [
   (event: React.MouseEvent | React.TouchEvent) => void,
@@ -75,32 +80,50 @@ export const useResizeCrop = (
       return;
     }
 
-    const x = restrictPointToBounds(getXPercent(event, imageRef));
-    const y = restrictPointToBounds(getYPercent(event, imageRef));
+    const x = clamp(getXPercent(event, imageRef));
+    const y = clamp(getYPercent(event, imageRef));
 
     const xDelta = x - x0;
     const yDelta = y - y0;
 
-    if (aspectRatio) {
-      onChange(
-        getNewAspectRatio(aspectRatio, { ...value, x, y }, state, imageRef)
-      );
-
-      return;
-    }
+    let width = clamp(Math.abs(xDelta), minWidth, maxWidth);
+    let height = clamp(Math.abs(yDelta), minHeight, maxHeight);
 
     const isNorthOrSouth = [Directions.North, Directions.South].includes(
       direction
     );
     const isEastOrWest = [Directions.East, Directions.West].includes(direction);
 
-    onChange({
+    let cropValue = {
       ...value,
       ...(!isNorthOrSouth ? { x: xDelta > 0 ? x0 : x } : {}),
-      ...(!isNorthOrSouth ? { width: Math.abs(xDelta) } : {}),
+      ...(!isNorthOrSouth ? { width } : {}),
       ...(!isEastOrWest ? { y: yDelta > 0 ? y0 : y } : {}),
-      ...(!isEastOrWest ? { height: Math.abs(yDelta) } : {})
-    });
+      ...(!isEastOrWest ? { height } : {})
+    };
+
+    if (aspectRatio) {
+      cropValue = {
+        ...cropValue,
+        ...getNewAspectRatio(aspectRatio, { ...value, x, y }, state, imageRef)
+      };
+    }
+
+    if (minWidth || maxWidth) {
+      cropValue = {
+        ...cropValue,
+        x: getRestrictedSizeCropValue(x, x0, minWidth, maxWidth)
+      };
+    }
+
+    if (minHeight || maxHeight) {
+      cropValue = {
+        ...cropValue,
+        y: getRestrictedSizeCropValue(y, y0, minHeight, maxHeight)
+      };
+    }
+
+    onChange(cropValue);
   };
 
   const finishResize = (): void => {

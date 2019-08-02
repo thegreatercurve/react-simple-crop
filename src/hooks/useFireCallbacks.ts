@@ -12,7 +12,7 @@ export const useFireCallbacks = (
   status: Status,
   imageRef: React.RefObject<HTMLImageElement>
 ): void => {
-  const prevStatusRef = React.useRef<Status | null>(null);
+  const prevStatusRef = React.useRef<Status>(Status.None);
 
   React.useEffect((): void => {
     prevStatusRef.current = status;
@@ -27,20 +27,22 @@ export const useFireCallbacks = (
 
     if (
       onStart &&
-      ((status === Status.Drawing && prevStatus === Status.None) ||
-        (status === Status.MovingByKeyboard && prevStatus === Status.None) ||
-        (status === Status.MovingByMouse && prevStatus === Status.None) ||
-        (status === Status.Resizing && prevStatus === Status.None))
+      (status === Status.Drawing ||
+        status === Status.MovingByKeyboard ||
+        status === Status.MovingByMouse ||
+        status === Status.Resizing) &&
+      prevStatus === Status.None
     ) {
       onStart();
     }
 
     if (
       onComplete &&
-      ((status === Status.None && prevStatus === Status.Drawing) ||
-        (status === Status.None && prevStatus === Status.MovingByKeyboard) ||
-        (status === Status.None && prevStatus === Status.MovingByMouse) ||
-        (status === Status.None && prevStatus === Status.Resizing))
+      status === Status.None &&
+      (prevStatus === Status.Drawing ||
+        prevStatus === Status.MovingByKeyboard ||
+        prevStatus === Status.MovingByMouse ||
+        prevStatus === Status.Resizing)
     ) {
       onComplete();
     }
