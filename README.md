@@ -88,20 +88,22 @@ const [value, setValue] = React.useState({
 
 #### Props
 
-- **value** _(required)_ `{ x: number; y: number; width: number; height: number; }` Percentage coordinates and size of the crop area. You can use this prop to initialize the state of the crop on the first render.
-- **src** _(required)_ `string` Source attribute which is passed to the image element
-- **onChange** _(required)_ `({ x: number; y: number; width: number; height: number; }) => void` Callback which is fired any time the coordinates or size of the crop area change.
-- **aspectRatio** `[number, number]` Restricts the ability to draw or resize a crop area to specific dimensions.
-- **minWidth** `number` Restrict the crop area to a minimum percentage width of the image element.
-- **maxWidth** `number` Restrict the crop area to a maximum percentage width of the image element.
-- **minHeight** `number` Restrict the crop area to a minimum percentage height of the image element.
-- **maxHeight** `number` Restrict the crop area to a maximum percentage height of the image element.
-- **className** `string` Class attribute passed to the containing element of the image and crop.
-- **alt** `string` Alt attribute which is passed to the image element.
-- **crossOrigin** `"anonymous" | "use-credentials"` Cross origin attribute which is passed to the image element.
-- **ref** `{ current: HTMLImageElement }` React ref object which is passed to the image element, and also needs to be passed to the `<Preview />` component. This is used to draw the new preview image.
-- **onComplete** `() => void` Callback which is fired any time the crop area starts to be drawn, moved by mouse or keyboard, or resized.
-- **onStart** `() => void` Callback which is fired any time the crop area stops being drawn, moved by mouse or keyboard, or resized.
+| Prop            | Required | Type                                                                 | Description                                                                                                                                                |
+| --------------- | :------: | -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **onChange**    | &#10003; | `({ x: number; y: number; width: number; height: number; }) => void` | Callback which is fired any time the coordinates or size of the crop area change.                                                                          |
+| **src**         | &#10003; | `string`                                                             | Source attribute which is passed to the image element                                                                                                      |
+| **value**       | &#10003; | `{ x: number; y: number; width: number; height: number; }`           | Percentage coordinates and size of the crop area. You can also use this prop to initialize the size of the crop on the first render.                       |
+| **aspectRatio** |          | `[number, number]`                                                   | Restricts the ability to draw or resize a crop area to specific dimensions.                                                                                |
+| **alt**         |          | `string`                                                             | Alt attribute which is passed to the image element.                                                                                                        |
+| **className**   |          | `string`                                                             | Class name attribute passed to the containing element of the image and crop area.                                                                          |
+| **crossOrigin** |          | `"anonymous" &#124; "use-credentials"`                               | Cross origin attribute which is passed to the image element.                                                                                               |
+| **maxHeight**   |          | `number`                                                             | Restricts the height of the crop area to a maximum percentage of the image element.                                                                        |
+| **maxWidth**    |          | `number`                                                             | Restricts the width of the crop area to a maximum percentage of the image element.                                                                         |
+| **minHeight**   |          | `number`                                                             | Restricts the height of the crop area to a minimum percentage of the image element.                                                                        |
+| **minWidth**    |          | `number`                                                             | Restricts the width of the crop area to a minimum percentage of the image element.                                                                         |
+| **onComplete**  |          | `() => void`                                                         | Callback which is fired any time the crop area finishes being drawn, moved by mouse or keyboard, or resized.                                               |
+| **onStart**     |          | `() => void`                                                         | Callback which is fired any time the crop area starts being drawn, moved by mouse or keyboard, or resized.                                                 |
+| **ref**         |          | `{ current: HTMLImageElement }`                                      | React ref object which is passed to the image element, and also needs to be passed to the `<Preview />` component. This is used to draw the preview image. |
 
 ### `<Preview />`
 
@@ -137,16 +139,10 @@ const [value, setValue] = React.useState({
 
 #### Props
 
-- **value** _(required)_ `{ x: number; y: number; width: number; height: number; }` Percentage coordinates and size of the crop area.
-- **fileType** `string` File type of the preview image (i.e. `image/jpeg`, `image/png`, or `image/gif`)
-- **ref** `{ current: HTMLImageElement }` React ref object of the `<Crop />` component image element. This is used to draw the new preview image.
+| Prop         | Required | Type                                                       | Description                                                                                         |
+| ------------ | :------- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| **ref**      | &#10003; | `{ current: HTMLImageElement }`                            | React ref object of the `<Crop />` component image element. This is used to draw the preview image. |
+| **value**    | &#10003; | `{ x: number; y: number; width: number; height: number; }` | Percentage coordinates and size of the crop area.                                                   |
+| **fileType** |          | `string`                                                   | File type of the preview image (i.e. `image/jpeg`, `image/png`, or `image/gif`).                    |
 
 Also accepts any HTML image attributes as props (i.e. `alt`, `crossOrigin` or `style`) apart from `src`, which is used internally by this component.
-
----
-
-## TODO
-
-- [x] Add maximum and minimum size constraints for the crop area.
-- [ ] Add support for maintaining the aspect ratio of the crop area on shift keydown.
-- [ ] Add tests.
