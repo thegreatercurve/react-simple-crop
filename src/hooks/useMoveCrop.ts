@@ -6,7 +6,7 @@ import {
   getXPercent,
   getYPercent,
   isArrowKey,
-  restrictPointToBounds
+  clamp
 } from "../utils";
 
 export const useMoveCrop = (
@@ -46,24 +46,16 @@ export const useMoveCrop = (
   ): void => {
     onChange({
       ...value,
-      x: restrictPointToBounds(
-        getXPercent(event, imageRef) - x0,
-        0,
-        100 - width
-      ),
-      y: restrictPointToBounds(
-        getYPercent(event, imageRef) - y0,
-        0,
-        100 - height
-      )
+      x: clamp(getXPercent(event, imageRef) - x0, 0, 100 - width),
+      y: clamp(getYPercent(event, imageRef) - y0, 0, 100 - height)
     });
   };
 
   const updateMoveByKeyboard = (x: number, y: number): void => {
     onChange({
       ...value,
-      x: restrictPointToBounds(x, 0, 100 - width),
-      y: restrictPointToBounds(y, 0, 100 - height)
+      x: clamp(x, 0, 100 - width),
+      y: clamp(y, 0, 100 - height)
     });
   };
 
