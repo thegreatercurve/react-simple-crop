@@ -5,7 +5,9 @@ A simple, easy-to-use and dependecy-free library for cropping images in React.
 ## Features
 
 - Responsive and touch enabled
-- Supports arrow key updates
+- Crop supports mimimum and maximum sizes
+- Crop can conform to an aspect ratio
+- Crop can be refined with arrow keys
 - Dependency-free (only 8kb minified)
 - Compatible with >IE11
 - Typescript support
@@ -91,7 +93,7 @@ const [value, setValue] = React.useState({
 | Prop            | Required | Type                                                                 | Description                                                                                                                                                |
 | --------------- | :------: | -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **onChange**    | &#10003; | `({ x: number; y: number; width: number; height: number; }) => void` | Callback which is fired any time the coordinates or size of the crop area change.                                                                          |
-| **src**         | &#10003; | `string`                                                             | Source attribute which is passed to the image element                                                                                                      |
+| **src**         | &#10003; | `string`                                                             | Source attribute which is passed to the image element.                                                                                                     |
 | **value**       | &#10003; | `{ x: number; y: number; width: number; height: number; }`           | Percentage coordinates and size of the crop area. You can also use this prop to initialize the size of the crop on the first render.                       |
 | **aspectRatio** |          | `[number, number]`                                                   | Restricts the ability to draw or resize a crop area to specific dimensions.                                                                                |
 | **alt**         |          | `string`                                                             | Alt attribute which is passed to the image element.                                                                                                        |
@@ -145,4 +147,4 @@ const [value, setValue] = React.useState({
 | **value**    | &#10003; | `{ x: number; y: number; width: number; height: number; }` | Percentage coordinates and size of the crop area.                                                   |
 | **fileType** |          | `string`                                                   | File type of the preview image (i.e. `image/jpeg`, `image/png`, or `image/gif`).                    |
 
-Also accepts any HTML image attributes as props (i.e. `alt`, `crossOrigin` or `style`) apart from `src`, which is used internally by this component.
+Also accepts any HTML image attributes as props (i.e. `alt`, `crossOrigin` or `style`), apart from `src`, which is used internally by this component.
