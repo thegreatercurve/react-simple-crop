@@ -3,12 +3,12 @@ version: 2
 default_image: &default_image
   working_directory: ~/repo
   docker:
-      - image: circleci/node:12.6.0
+    - image: circleci/node:12.6.0
 
 default_filters: &default_filters
   filters:
     tags:
-      only: /.*/
+      only: /v.*/
     branches:
       only: /.*/
 
@@ -59,6 +59,6 @@ workflows:
             - check_formatting
           filters:
             tags:
-              only: /.*/
+              only: /v.*/
             branches:
               ignore: /.*/
