@@ -142,7 +142,7 @@ const [value, setValue] = React.useState({
 #### Props
 
 | Prop         | Required | Type                                                       | Description                                                                                         |
-| ------------ | :------- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| ------------ | :------: | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
 | **ref**      | &#10003; | `{ current: HTMLImageElement }`                            | React ref object of the `<Crop />` component image element. This is used to draw the preview image. |
 | **value**    | &#10003; | `{ x: number; y: number; width: number; height: number; }` | Percentage coordinates and size of the crop area.                                                   |
 | **fileType** |          | `string`                                                   | File type of the preview image (i.e. `image/jpeg`, `image/png`, or `image/gif`).                    |
