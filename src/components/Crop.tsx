@@ -53,9 +53,10 @@ export const Crop = React.forwardRef<HTMLImageElement, CropProps>(
       src = "",
       value
     },
-    innerRef
+    imageRef
   ): React.ReactElement => {
-    const imageRef = React.useRef<HTMLImageElement>(null);
+    const innerContainerRef = React.useRef<HTMLImageElement>(null);
+
     const [state, dispatch] = React.useReducer(mainReducer, INITIAL_STATE);
 
     const { status } = state;
@@ -91,9 +92,11 @@ export const Crop = React.forwardRef<HTMLImageElement, CropProps>(
       aspectRatio
     );
 
-    useFireCallbacks({ onComplete, onStart }, status, imageRef);
+    useFireCallbacks({ onComplete, onStart }, status, innerContainerRef);
 
-    const customClassName = `ReactSimpleCrop ${className}`;
+    const customClassName = `ReactSimpleCrop${
+      className ? ` ${className}` : ""
+    }`;
 
     const showCrop = width > 0 || height > 0;
 
@@ -102,16 +105,16 @@ export const Crop = React.forwardRef<HTMLImageElement, CropProps>(
     ): void => {
       event.preventDefault();
 
-      if (!imageRef.current) {
+      if (!innerContainerRef.current) {
         return;
       }
 
       if (status === Status.Drawing) {
-        updateDraw(event, imageRef.current);
+        updateDraw(event, innerContainerRef.current);
       } else if (status === Status.MovingByMouse) {
-        updateMoveByMouse(event, imageRef.current);
+        updateMoveByMouse(event, innerContainerRef.current);
       } else if (status === Status.Resizing) {
-        updateResize(event, imageRef.current);
+        updateResize(event, innerContainerRef.current);
       }
     };
 
@@ -143,21 +146,21 @@ export const Crop = React.forwardRef<HTMLImageElement, CropProps>(
     const handleImageMouseDown = (
       event: React.MouseEvent | React.TouchEvent
     ): void => {
-      if (!imageRef.current) {
+      if (!innerContainerRef.current) {
         return;
       }
 
-      startDraw(event, imageRef.current);
+      startDraw(event, innerContainerRef.current);
     };
 
     const handleCropMouseDown = (
       event: React.MouseEvent | React.TouchEvent
     ): void => {
-      if (!imageRef.current) {
+      if (!innerContainerRef.current) {
         return;
       }
 
-      startMoveByKeyboard(event, imageRef.current);
+      startMoveByKeyboard(event, innerContainerRef.current);
     };
 
     React.useEffect((): (() => void) => {
@@ -165,8 +168,8 @@ export const Crop = React.forwardRef<HTMLImageElement, CropProps>(
 
       const options = supportsPassive ? { passive: false } : false;
 
-      if (imageRef.current) {
-        imageRef.current.addEventListener(
+      if (innerContainerRef.current) {
+        innerContainerRef.current.addEventListener(
           "touchmove",
           handleContainerMouseMove,
           options
@@ -174,8 +177,8 @@ export const Crop = React.forwardRef<HTMLImageElement, CropProps>(
       }
 
       return (): void => {
-        if (imageRef.current) {
-          imageRef.current.removeEventListener(
+        if (innerContainerRef.current) {
+          innerContainerRef.current.removeEventListener(
             "touchmove",
             handleContainerMouseMove
           );
@@ -191,7 +194,10 @@ export const Crop = React.forwardRef<HTMLImageElement, CropProps>(
         onTouchEnd={handleContainerMouseUp}
         onTouchMove={handleContainerMouseMove}
       >
-        <div className="ReactSimpleCrop__container" ref={imageRef}>
+        <div
+          className="ReactSimpleCrop__inner-container"
+          ref={innerContainerRef}
+        >
           {showCrop ? (
             <div
               className="ReactSimpleCrop__crop"
@@ -221,7 +227,7 @@ export const Crop = React.forwardRef<HTMLImageElement, CropProps>(
             crossOrigin={crossOrigin}
             onMouseDown={handleImageMouseDown}
             onTouchStart={handleImageMouseDown}
-            ref={innerRef}
+            ref={imageRef}
             src={src}
           />
         </div>

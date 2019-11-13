@@ -2,7 +2,7 @@ $responsive-breakpoint: 768px;
 
 $crop-border-width: 1px;
 $crop-border-color: #000000;
-$crop-box-shadow-color: rgba(0,0,0,0.6);
+$crop-box-shadow-color: rgba(0, 0, 0, 0.6);
 
 $handle-size-mobile: 1rem;
 $handle-size-desktop: 0.7rem;
@@ -10,13 +10,13 @@ $handle-background-color: #ffffff;
 $handle-border-color: #000000;
 
 .ReactSimpleCrop {
-  &__container {
+  &__inner-container {
     display: inline-block;
     touch-action: none;
     position: relative;
     overflow: hidden;
   }
-  
+
   &__image {
     cursor: crosshair;
     max-width: 100%;
@@ -30,10 +30,10 @@ $handle-border-color: #000000;
     position: absolute;
     z-index: 1;
   }
-  
+
   &__handle {
     background: $handle-background-color;
-    border: $crop-border-width solid $handle-border-color; 
+    border: $crop-border-width solid $handle-border-color;
     border-radius: 50%;
     height: $handle-size-mobile;
     position: absolute;
@@ -42,62 +42,72 @@ $handle-border-color: #000000;
     &--n {
       cursor: n-resize;
     }
-    
+
     &--ne {
       cursor: ne-resize;
     }
-    
+
     &--e {
       cursor: e-resize;
     }
-    
+
     &--se {
       cursor: se-resize;
     }
-    
+
     &--s {
       cursor: s-resize;
     }
-    
+
     &--sw {
       cursor: sw-resize;
     }
-    
+
     &--w {
       cursor: w-resize;
     }
-    
+
     &--nw {
       cursor: nw-resize;
     }
 
-
     &--n {
       left: calc(50% - #{$handle-size-mobile} / 2);
     }
+
     &--e {
       top: calc(50% - #{$handle-size-mobile} / 2);
     }
+
     &--s {
       left: calc(50% - #{$handle-size-mobile} / 2);
     }
+
     &--w {
       top: calc(50% - #{$handle-size-mobile} / 2);
     }
-  
-    &--n, &--nw, &--ne {
+
+    &--n,
+    &--nw,
+    &--ne {
       top: calc(#{$handle-size-mobile} / -2 - #{$crop-border-width});
     }
-    
-    &--e, &--ne, &--se {
+
+    &--e,
+    &--ne,
+    &--se {
       right: calc(#{$handle-size-mobile} / -2 - #{$crop-border-width});
     }
-    
-    &--s, &--se, &--sw {
+
+    &--s,
+    &--se,
+    &--sw {
       bottom: calc(#{$handle-size-mobile} / -2 - #{$crop-border-width});
     }
-    
-    &--w, &--sw, &--nw {
+
+    &--w,
+    &--sw,
+    &--nw {
       left: calc(#{$handle-size-mobile} / -2 - #{$crop-border-width});
     }
 
@@ -108,29 +118,40 @@ $handle-border-color: #000000;
       &--n {
         left: calc(50% - #{$handle-size-desktop} / 2);
       }
+
       &--e {
         top: calc(50% - #{$handle-size-desktop} / 2);
       }
+
       &--s {
         left: calc(50% - #{$handle-size-desktop} / 2);
       }
+
       &--w {
         top: calc(50% - #{$handle-size-desktop} / 2);
       }
-    
-      &--n, &--nw, &--ne {
+
+      &--n,
+      &--nw,
+      &--ne {
         top: calc(#{$handle-size-desktop} / -2 - #{$crop-border-width});
       }
-      
-      &--e, &--ne, &--se {
+
+      &--e,
+      &--ne,
+      &--se {
         right: calc(#{$handle-size-desktop} / -2 - #{$crop-border-width});
       }
-      
-      &--s, &--se, &--sw {
+
+      &--s,
+      &--se,
+      &--sw {
         bottom: calc(#{$handle-size-desktop} / -2 - #{$crop-border-width});
       }
-      
-      &--w, &--sw, &--nw {
+
+      &--w,
+      &--sw,
+      &--nw {
         left: calc(#{$handle-size-desktop} / -2 - #{$crop-border-width});
       }
     }
