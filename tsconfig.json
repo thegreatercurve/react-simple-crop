@@ -8,6 +8,7 @@
     "declaration": true,
     "strict": true,
     "target": "es5",
+    "rootDirs": ["src", "stories"],
     "lib": ["dom", "esnext"]
   },
   "include": ["src"]

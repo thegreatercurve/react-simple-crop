@@ -56,7 +56,7 @@ export const mainReducer = (
 
       return {
         ...state,
-        ...(pressedKeys.length < 1 && { status: Status.None }),
+        ...(pressedKeys.length < 1 ? { status: Status.None } : {}),
         pressedKeys
       };
     case ResizeActionTypes.StartResize:

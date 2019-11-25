@@ -4,14 +4,9 @@
 # production
 /dist
 
-# demo
-/demo/dist
-/demo/node_modules
-
 # misc
 /.cache
 /.vscode
 /coverage
 .DS_Store
 npm-debug.log*
-react-simple-crop-*
