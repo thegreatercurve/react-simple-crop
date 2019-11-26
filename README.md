@@ -21,7 +21,13 @@ npm i react-simple-crop --save
 
 ## Demo
 
-An example can be found [here on CodeSandbox](https://codesandbox.io/s/cocky-lake-9jy0d).
+A simple example can be found [here on CodeSandbox](https://codesandbox.io/s/cocky-lake-9jy0d).
+
+There is also a full suite of Storybook stories, which can be run locally:
+
+```
+npm run storybook
+```
 
 ## Basic Usage
 
