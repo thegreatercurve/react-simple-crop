@@ -28,12 +28,26 @@ jobs:
           root: ~/repo
           paths: .
 
-  check_formatting:
+  formatting_check:
     <<: *default_image
     steps:
       - attach_workspace:
           at: ~/repo
       - run: npm run format:check
+
+  linting_check:
+    <<: *default_image
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run: npm run lint
+
+  test_e2e:
+    <<: *default_image
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run: npm run test:e2e
 
   publish_npm:
     <<: *default_image
@@ -49,14 +63,28 @@ workflows:
     jobs:
       - install:
           <<: *default_filters
-      - check_formatting:
+
+      - formatting_check:
           <<: *default_filters
           requires:
             - install
+     
+      - linting_check:
+          <<: *default_filters
+          requires:
+            - install
+
+      - test_e2e:
+          <<: *default_filters
+          requires:
+            - install
+
       - publish_npm:
           context: npm-user
           requires:
-            - check_formatting
+            - formatting_check
+            - linting_check
+            - test_e2e
           filters:
             tags:
               only: /v.*/

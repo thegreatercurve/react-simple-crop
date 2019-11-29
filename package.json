@@ -8,12 +8,15 @@
     "build": "npm run clean && npx webpack --mode production",
     "build:storybook": "build-storybook",
     "clean": "rm -rf './dist'",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
     "dev": "npm run clean && npx webpack --mode development",
-    "format": "prettier --write './src/**/*.{ts,tsx}'",
-    "format:check": "prettier --check './src/**/*.{ts,tsx}'",
-    "lint": "eslint './src/**/*.{ts,tsx}'",
+    "format": "prettier --write './{cypress,src,stories}/**/*.{js,jsx,ts,tsx}'",
+    "format:check": "prettier --check './{cypress,src,stories}/**/*.{js,jsx,ts,tsx}'",
+    "lint": "eslint './src/**/*.{js,jsx,ts,tsx}'",
     "prepare": "npm run build",
-    "storybook": "start-storybook -p 6006"
+    "storybook": "start-storybook -p 6006 --ci",
+    "test:e2e": "start-server-and-test storybook http://localhost:6006 cypress:run"
   },
   "files": [
     "/dist"
@@ -31,7 +34,6 @@
   "devDependencies": {
     "@babel/core": "^7.7.2",
     "@storybook/addon-actions": "^5.2.6",
-    "@storybook/addon-info": "^5.2.6",
     "@storybook/addon-viewport": "^5.2.6",
     "@storybook/addons": "^5.2.6",
     "@storybook/react": "^5.2.6",
@@ -42,7 +44,8 @@
     "babel-loader": "^8.0.6",
     "copy-webpack-plugin": "^5.0.5",
     "css-loader": "^2.1.1",
-    "eslint": "^5.16.0",
+    "cypress": "^3.7.0",
+    "eslint": "^6.7.2",
     "eslint-config-prettier": "^4.3.0",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.14.3",
@@ -50,15 +53,12 @@
     "node-sass": "^4.12.0",
     "prettier": "^1.16.4",
     "sass-loader": "^7.2.0",
+    "start-server-and-test": "^1.10.6",
     "style-loader": "^0.23.1",
     "ts-loader": "^6.0.4",
     "typescript": "^3.5.3",
     "webpack": "^4.39.2",
-    "webpack-cli": "^3.3.7"
-  },
-  "jest": {
-    "preset": "ts-jest",
-    "testEnvironment": "node"
+    "webpack-cli": "^3.3.10"
   },
   "peerDependencies": {
     "react": "^16.8.6",

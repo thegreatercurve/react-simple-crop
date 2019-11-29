@@ -2,4 +2,4 @@ import * as React from "react";
 
 import "./style.scss";
 
-export const GlobalStylesDecorator = storyFn => <>{storyFn()}</>;
+export const GlobalStylesDecorator = (storyFn: any) => <>{storyFn()}</>;
