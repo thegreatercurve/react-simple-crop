@@ -155,16 +155,15 @@ Also accepts any HTML image attributes as props (i.e. `alt`, `crossOrigin` or `s
 
 ## Testing
 
-The Cypress GUI can be opened with the below command:
+There are no unit tests. Instead, we use end-to-end tests.
 
+We require an actual DOM, versus an emulated DOM like [JSDOM](https://github.com/jsdom/jsdom), which is often used with unit testing libraries, to be able to easily compute image sizes and positions.
+
+To run the Cypress E2E tests locally, first ensure the Storybook server is running:
+```
+npm run storybook
+```
+Then, in another terminal:
 ```
 npm run cypress:open
 ```
-
-To run the full test suite in CI mode: 
-
-```
-npm run test:e2e
-```
-
-Please note, there are no unit tests as we require an actual DOM, versus an emulated DOM like [JSDOM](https://github.com/jsdom/jsdom) which is often used with unit testing libraries, to be able to easily compute image sizes and positions.
