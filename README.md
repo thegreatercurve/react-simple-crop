@@ -59,8 +59,6 @@ export const App = () => {
 };
 ```
 
----
-
 ## Components
 
 ### `<Crop />`
@@ -154,3 +152,19 @@ const [value, setValue] = React.useState({
 | **fileType** |          | `string`                                                   | File type of the preview image (i.e. `image/jpeg`, `image/png`, or `image/gif`).                    |
 
 Also accepts any HTML image attributes as props (i.e. `alt`, `crossOrigin` or `style`), apart from `src`, which is used internally by this component.
+
+## Testing
+
+The Cypress GUI can be opened with the below command:
+
+```
+npm run cypress:open
+```
+
+To run the full test suite in CI mode: 
+
+```
+npm run test:e2e
+```
+
+Please note, there are no unit tests as we require an actual DOM, versus an emulated DOM like [JSDOM](https://github.com/jsdom/jsdom), which is often used with unit testing libraries, to be able to easily compute image sizes and positions.
