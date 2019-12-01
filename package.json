@@ -1,6 +1,6 @@
 {
   "name": "react-simple-crop",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A simple and light-weight library of React components for cropping images",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
