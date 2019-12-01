@@ -61,6 +61,7 @@ workflows:
           <<: *default_filters
 
       - cypress/run:
+          <<: *default_filters
           start: npm run storybook
           wait-on: 'http://localhost:6006'
           requires:
