@@ -1,4 +1,7 @@
-version: 2
+version: 2.1
+
+orbs:
+  cypress: cypress-io/cypress@1
 
 default_image: &default_image
   working_directory: ~/repo
