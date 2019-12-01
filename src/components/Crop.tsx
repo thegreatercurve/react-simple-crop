@@ -189,6 +189,7 @@ export const Crop = React.forwardRef<HTMLImageElement, CropProps>(
     return (
       <div
         className={customClassName}
+        data-testid="container"
         onMouseMove={handleContainerMouseMove}
         onMouseUp={handleContainerMouseUp}
         onTouchEnd={handleContainerMouseUp}
@@ -196,11 +197,13 @@ export const Crop = React.forwardRef<HTMLImageElement, CropProps>(
       >
         <div
           className="ReactSimpleCrop__inner-container"
+          data-testid="inner-container"
           ref={innerContainerRef}
         >
           {showCrop ? (
             <div
               className="ReactSimpleCrop__crop"
+              data-testid="crop"
               onKeyDown={handleCropKeyDown}
               onKeyUp={handleCropKeyUp}
               onMouseDown={handleCropMouseDown}
@@ -212,6 +215,7 @@ export const Crop = React.forwardRef<HTMLImageElement, CropProps>(
                 !aspectRatio || i % 2 !== 0 ? (
                   <div
                     className={`ReactSimpleCrop__handle ReactSimpleCrop__handle--${direction}`}
+                    data-testid={`handle-${direction}`}
                     id={direction}
                     key={direction}
                     onMouseDown={startResize}
@@ -225,6 +229,7 @@ export const Crop = React.forwardRef<HTMLImageElement, CropProps>(
             alt={alt}
             className="ReactSimpleCrop__image"
             crossOrigin={crossOrigin}
+            data-testid="image"
             onMouseDown={handleImageMouseDown}
             onTouchStart={handleImageMouseDown}
             ref={imageRef}

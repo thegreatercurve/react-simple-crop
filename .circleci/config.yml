@@ -1,4 +1,7 @@
-version: 2
+version: 2.1
+
+orbs:
+  cypress: cypress-io/cypress@1
 
 default_image: &default_image
   working_directory: ~/repo
@@ -18,22 +21,29 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
+          key: dependency-cache-{{ checksum "package-lock.json" }}
       - run: npm install
       - save_cache:
           paths:
-            - node_modules
-          key: dependency-cache-{{ checksum "package.json" }}
+            - ./node_modules
+          key: dependency-cache-{{ checksum "package-lock.json" }}
       - persist_to_workspace:
           root: ~/repo
           paths: .
 
-  check_formatting:
+  formatting_check:
     <<: *default_image
     steps:
       - attach_workspace:
           at: ~/repo
       - run: npm run format:check
+
+  linting_check:
+    <<: *default_image
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run: npm run lint
 
   publish_npm:
     <<: *default_image
@@ -49,14 +59,29 @@ workflows:
     jobs:
       - install:
           <<: *default_filters
-      - check_formatting:
+
+      - cypress/run:
+          start: npm run storybook
+          wait-on: 'http://localhost:6006'
+          requires:
+            - install
+            
+      - formatting_check:
           <<: *default_filters
           requires:
             - install
+     
+      - linting_check:
+          <<: *default_filters
+          requires:
+            - install
+
       - publish_npm:
           context: npm-user
           requires:
-            - check_formatting
+            - cypress/run
+            - formatting_check
+            - linting_check
           filters:
             tags:
               only: /v.*/

@@ -59,8 +59,6 @@ export const App = () => {
 };
 ```
 
----
-
 ## Components
 
 ### `<Crop />`
@@ -104,7 +102,7 @@ const [value, setValue] = React.useState({
 | **aspectRatio** |          | `[number, number]`                                                   | Restricts the ability to draw or resize a crop area to specific dimensions.                                                                                |
 | **alt**         |          | `string`                                                             | Alt attribute which is passed to the image element.                                                                                                        |
 | **className**   |          | `string`                                                             | Class name attribute passed to the containing element of the image and crop area.                                                                          |
-| **crossOrigin** |          | `"anonymous" &#124; "use-credentials"`                               | Cross origin attribute which is passed to the image element.                                                                                               |
+| **crossOrigin** |          | `"anonymous" | "use-credentials"`                               | Cross origin attribute which is passed to the image element.                                                                                               |
 | **maxHeight**   |          | `number`                                                             | Restricts the height of the crop area to a maximum percentage of the image element.                                                                        |
 | **maxWidth**    |          | `number`                                                             | Restricts the width of the crop area to a maximum percentage of the image element.                                                                         |
 | **minHeight**   |          | `number`                                                             | Restricts the height of the crop area to a minimum percentage of the image element.                                                                        |
@@ -154,3 +152,18 @@ const [value, setValue] = React.useState({
 | **fileType** |          | `string`                                                   | File type of the preview image (i.e. `image/jpeg`, `image/png`, or `image/gif`).                    |
 
 Also accepts any HTML image attributes as props (i.e. `alt`, `crossOrigin` or `style`), apart from `src`, which is used internally by this component.
+
+## Testing
+
+There are no unit tests. Instead, we use end-to-end tests.
+
+We require an actual DOM, versus an emulated DOM like [JSDOM](https://github.com/jsdom/jsdom), which is often used with unit testing libraries, to be able to easily compute image sizes and positions.
+
+To run the Cypress E2E tests locally, first ensure the Storybook server is running:
+```
+npm run storybook
+```
+Then, in another terminal:
+```
+npm run cypress:open
+```

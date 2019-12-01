@@ -1,5 +1,4 @@
 import * as React from "react";
-// eslint-disable-line
 import { Crop, CropValue, Preview } from "../src";
 import {
   DEFAULT_INITIAL_STATE,
