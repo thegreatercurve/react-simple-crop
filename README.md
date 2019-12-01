@@ -167,4 +167,4 @@ To run the full test suite in CI mode:
 npm run test:e2e
 ```
 
-Please note, there are no unit tests as we require an actual DOM, versus an emulated DOM like [JSDOM](https://github.com/jsdom/jsdom), which is often used with unit testing libraries, to be able to easily compute image sizes and positions.
+Please note, there are no unit tests as we require an actual DOM, versus an emulated DOM like [JSDOM](https://github.com/jsdom/jsdom) which is often used with unit testing libraries, to be able to easily compute image sizes and positions.
