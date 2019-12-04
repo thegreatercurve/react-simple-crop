@@ -13,7 +13,9 @@ export const useMoveCrop = (
   dispatch: React.Dispatch<MoveAction>,
   onChange: (crop: CropValue) => void,
   value: CropValue,
-  { pressedKeys, x0, y0 }: State
+  { pressedKeys, x0, y0 }: State,
+  onStart?: () => void,
+  onComplete?: () => void
 ): [
   (
     event: React.MouseEvent | React.TouchEvent,
@@ -29,10 +31,14 @@ export const useMoveCrop = (
 ] => {
   const { height, width, x, y } = value;
 
-  const startMoveByKeyboard = (
+  const startMoveByMouse = (
     event: React.MouseEvent | React.TouchEvent,
     imageRef: HTMLImageElement
   ): void => {
+    if (onStart) {
+      onStart();
+    }
+
     dispatch({
       type: MoveActionTypes.StartMoveByMouse,
       x: getXPercent(event, imageRef) - x,
@@ -59,7 +65,11 @@ export const useMoveCrop = (
     });
   };
 
-  const finishMoveByKeyboard = (): void => {
+  const finishMoveByMouse = (): void => {
+    if (onComplete) {
+      onComplete();
+    }
+
     dispatch({ type: MoveActionTypes.FinishMoveByMouse });
   };
 
@@ -94,6 +104,10 @@ export const useMoveCrop = (
       newY = y + NUDGE_PERCENTAGE;
     }
 
+    if (onStart && !pressedKeys.includes(key)) {
+      onStart();
+    }
+
     updateMoveByKeyboard(newX, newY);
 
     if (!pressedKeys.includes(key)) {
@@ -108,13 +122,17 @@ export const useMoveCrop = (
       return;
     }
 
+    if (onComplete) {
+      onComplete();
+    }
+
     dispatch({ key, type: MoveActionTypes.FinishMoveByKeyboard });
   };
 
   return [
-    startMoveByKeyboard,
+    startMoveByMouse,
     updateMoveByMouse,
-    finishMoveByKeyboard,
+    finishMoveByMouse,
     startMoveOnKeyDown,
     finishMoveOnKeyUp
   ];
