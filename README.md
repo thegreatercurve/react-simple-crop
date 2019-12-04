@@ -16,7 +16,7 @@ A simple, easy-to-use and dependecy-free library for cropping images in React.
 ## Installation
 
 ```
-npm i react-simple-crop --save
+npm i react-simple-crop
 ```
 
 ## Demo
