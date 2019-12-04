@@ -13,6 +13,8 @@ export const useDrawCrop = (
   dispatch: React.Dispatch<DrawAction>,
   onChange: (crop: CropValue) => void,
   state: State,
+  onStart?: () => void,
+  onComplete?: () => void,
   minWidth?: number,
   maxWidth?: number,
   minHeight?: number,
@@ -40,6 +42,10 @@ export const useDrawCrop = (
 
     const x = getXPercent(event, imageRef);
     const y = getYPercent(event, imageRef);
+
+    if (onStart) {
+      onStart();
+    }
 
     onChange({
       height: 0,
@@ -102,6 +108,10 @@ export const useDrawCrop = (
   };
 
   const finishDraw = (): void => {
+    if (onComplete) {
+      onComplete();
+    }
+
     dispatch({ type: DrawActionTypes.FinishDraw });
   };
 

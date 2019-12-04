@@ -1,10 +1,5 @@
 import * as React from "react";
-import {
-  useDrawCrop,
-  useFireCallbacks,
-  useMoveCrop,
-  useResizeCrop
-} from "../hooks";
+import { useDrawCrop, useMoveCrop, useResizeCrop } from "../hooks";
 import { INITIAL_STATE, mainReducer } from "../reducers";
 import { AspectRatio, CropValue, Directions, Status } from "../types";
 import { arePassiveListenersSupported, getCropStyle } from "../utils";
@@ -67,6 +62,8 @@ export const Crop = React.forwardRef<HTMLImageElement, CropProps>(
       dispatch,
       onChange,
       state,
+      onStart,
+      onComplete,
       minWidth,
       maxWidth,
       minHeight,
@@ -79,20 +76,20 @@ export const Crop = React.forwardRef<HTMLImageElement, CropProps>(
       finishMoveByKeyboard,
       startMoveOnKeyDown,
       finishMoveOnKeyUp
-    ] = useMoveCrop(dispatch, onChange, value, state);
+    ] = useMoveCrop(dispatch, onChange, value, state, onStart, onComplete);
     const [startResize, updateResize, finishResize] = useResizeCrop(
       dispatch,
       onChange,
       value,
       state,
+      onStart,
+      onComplete,
       minWidth,
       maxWidth,
       minHeight,
       maxHeight,
       aspectRatio
     );
-
-    useFireCallbacks({ onComplete, onStart }, status, innerContainerRef);
 
     const customClassName = `ReactSimpleCrop${
       className ? ` ${className}` : ""

@@ -41,6 +41,8 @@ export const useResizeCrop = (
   onChange: (crop: CropValue) => void,
   value: CropValue,
   state: State,
+  onStart?: () => void,
+  onComplete?: () => void,
   minWidth?: number,
   maxWidth?: number,
   minHeight?: number,
@@ -63,6 +65,10 @@ export const useResizeCrop = (
 
     if (!isDirection(id)) {
       return;
+    }
+
+    if (onStart) {
+      onStart();
     }
 
     dispatch({
@@ -127,6 +133,10 @@ export const useResizeCrop = (
   };
 
   const finishResize = (): void => {
+    if (onComplete) {
+      onComplete();
+    }
+
     dispatch({ type: ResizeActionTypes.FinishResize });
   };
 

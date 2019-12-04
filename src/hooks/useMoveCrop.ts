@@ -13,7 +13,9 @@ export const useMoveCrop = (
   dispatch: React.Dispatch<MoveAction>,
   onChange: (crop: CropValue) => void,
   value: CropValue,
-  { pressedKeys, x0, y0 }: State
+  { pressedKeys, x0, y0 }: State,
+  onStart?: () => void,
+  onComplete?: () => void
 ): [
   (
     event: React.MouseEvent | React.TouchEvent,
@@ -33,6 +35,10 @@ export const useMoveCrop = (
     event: React.MouseEvent | React.TouchEvent,
     imageRef: HTMLImageElement
   ): void => {
+    if (onStart) {
+      onStart();
+    }
+
     dispatch({
       type: MoveActionTypes.StartMoveByMouse,
       x: getXPercent(event, imageRef) - x,
@@ -60,6 +66,10 @@ export const useMoveCrop = (
   };
 
   const finishMoveByKeyboard = (): void => {
+    if (onComplete) {
+      onComplete();
+    }
+
     dispatch({ type: MoveActionTypes.FinishMoveByMouse });
   };
 
@@ -77,6 +87,10 @@ export const useMoveCrop = (
 
     if (!direction) {
       return;
+    }
+
+    if (onStart) {
+      onStart();
     }
 
     let newX = x;
@@ -106,6 +120,10 @@ export const useMoveCrop = (
   }: React.KeyboardEvent<HTMLDivElement>): void => {
     if (!isArrowKey(key)) {
       return;
+    }
+
+    if (onComplete) {
+      onComplete();
     }
 
     dispatch({ key, type: MoveActionTypes.FinishMoveByKeyboard });
