@@ -31,7 +31,7 @@ export const useMoveCrop = (
 ] => {
   const { height, width, x, y } = value;
 
-  const startMoveByKeyboard = (
+  const startMoveByMouse = (
     event: React.MouseEvent | React.TouchEvent,
     imageRef: HTMLImageElement
   ): void => {
@@ -65,7 +65,7 @@ export const useMoveCrop = (
     });
   };
 
-  const finishMoveByKeyboard = (): void => {
+  const finishMoveByMouse = (): void => {
     if (onComplete) {
       onComplete();
     }
@@ -89,10 +89,6 @@ export const useMoveCrop = (
       return;
     }
 
-    if (onStart) {
-      onStart();
-    }
-
     let newX = x;
     let newY = y;
 
@@ -106,6 +102,10 @@ export const useMoveCrop = (
       newY = y - NUDGE_PERCENTAGE;
     } else if (direction.includes("s")) {
       newY = y + NUDGE_PERCENTAGE;
+    }
+
+    if (onStart && !pressedKeys.includes(key)) {
+      onStart();
     }
 
     updateMoveByKeyboard(newX, newY);
@@ -130,9 +130,9 @@ export const useMoveCrop = (
   };
 
   return [
-    startMoveByKeyboard,
+    startMoveByMouse,
     updateMoveByMouse,
-    finishMoveByKeyboard,
+    finishMoveByMouse,
     startMoveOnKeyDown,
     finishMoveOnKeyUp
   ];
