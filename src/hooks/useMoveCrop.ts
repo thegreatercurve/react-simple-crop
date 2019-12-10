@@ -1,6 +1,6 @@
 import * as React from "react";
 import { State } from "../reducers";
-import { CropValue, MoveAction, MoveActionTypes } from "../types";
+import { CropValue, MoveAction, MoveActionTypes, Status } from "../types";
 import {
   getDirectionDirection,
   getXPercent,
@@ -11,11 +11,11 @@ import {
 
 export const useMoveCrop = (
   dispatch: React.Dispatch<MoveAction>,
-  onChange: (crop: CropValue) => void,
+  onChange: (crop: CropValue, status: Status) => void,
   value: CropValue,
   { pressedKeys, x0, y0 }: State,
-  onStart?: () => void,
-  onComplete?: () => void
+  onStart?: (status: Status) => void,
+  onComplete?: (status: Status) => void
 ): [
   (
     event: React.MouseEvent | React.TouchEvent,
@@ -36,7 +36,7 @@ export const useMoveCrop = (
     imageRef: HTMLImageElement
   ): void => {
     if (onStart) {
-      onStart();
+      onStart(Status.MovingByMouse);
     }
 
     dispatch({
@@ -50,24 +50,30 @@ export const useMoveCrop = (
     event: React.MouseEvent | React.TouchEvent | TouchEvent,
     imageRef: HTMLImageElement
   ): void => {
-    onChange({
-      ...value,
-      x: clamp(getXPercent(event, imageRef) - x0, 0, 100 - width),
-      y: clamp(getYPercent(event, imageRef) - y0, 0, 100 - height)
-    });
+    onChange(
+      {
+        ...value,
+        x: clamp(getXPercent(event, imageRef) - x0, 0, 100 - width),
+        y: clamp(getYPercent(event, imageRef) - y0, 0, 100 - height)
+      },
+      Status.MovingByMouse
+    );
   };
 
   const updateMoveByKeyboard = (x: number, y: number): void => {
-    onChange({
-      ...value,
-      x: clamp(x, 0, 100 - width),
-      y: clamp(y, 0, 100 - height)
-    });
+    onChange(
+      {
+        ...value,
+        x: clamp(x, 0, 100 - width),
+        y: clamp(y, 0, 100 - height)
+      },
+      Status.MovingByKeyboard
+    );
   };
 
   const finishMoveByMouse = (): void => {
     if (onComplete) {
-      onComplete();
+      onComplete(Status.MovingByMouse);
     }
 
     dispatch({ type: MoveActionTypes.FinishMoveByMouse });
@@ -105,7 +111,7 @@ export const useMoveCrop = (
     }
 
     if (onStart && !pressedKeys.includes(key)) {
-      onStart();
+      onStart(Status.MovingByKeyboard);
     }
 
     updateMoveByKeyboard(newX, newY);
@@ -123,7 +129,7 @@ export const useMoveCrop = (
     }
 
     if (onComplete) {
-      onComplete();
+      onComplete(Status.MovingByKeyboard);
     }
 
     dispatch({ key, type: MoveActionTypes.FinishMoveByKeyboard });

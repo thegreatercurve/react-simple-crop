@@ -26,9 +26,9 @@ export interface CropProps {
   minWidth?: number;
   src?: string;
   value: CropValue;
-  onChange: (crop: CropValue) => void;
-  onComplete?: () => void;
-  onStart?: () => void;
+  onChange: (crop: CropValue, status: Status) => void;
+  onComplete?: (status: Status) => void;
+  onStart?: (status: Status) => void;
 }
 
 export const Crop = React.forwardRef<HTMLImageElement, CropProps>(

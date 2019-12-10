@@ -5,7 +5,8 @@ import {
   CropValue,
   Directions,
   ResizeAction,
-  ResizeActionTypes
+  ResizeActionTypes,
+  Status
 } from "../types";
 import {
   clamp,
@@ -38,11 +39,11 @@ const getOppositeDirection = ({
 
 export const useResizeCrop = (
   dispatch: React.Dispatch<ResizeAction>,
-  onChange: (crop: CropValue) => void,
+  onChange: (crop: CropValue, staus: Status) => void,
   value: CropValue,
   state: State,
-  onStart?: () => void,
-  onComplete?: () => void,
+  onStart?: (staus: Status) => void,
+  onComplete?: (staus: Status) => void,
   minWidth?: number,
   maxWidth?: number,
   minHeight?: number,
@@ -68,7 +69,7 @@ export const useResizeCrop = (
     }
 
     if (onStart) {
-      onStart();
+      onStart(Status.Resizing);
     }
 
     dispatch({
@@ -129,12 +130,12 @@ export const useResizeCrop = (
       };
     }
 
-    onChange(cropValue);
+    onChange(cropValue, Status.Resizing);
   };
 
   const finishResize = (): void => {
     if (onComplete) {
-      onComplete();
+      onComplete(Status.Resizing);
     }
 
     dispatch({ type: ResizeActionTypes.FinishResize });

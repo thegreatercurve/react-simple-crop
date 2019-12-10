@@ -1,6 +1,12 @@
 import * as React from "react";
 import { State } from "../reducers";
-import { AspectRatio, CropValue, DrawAction, DrawActionTypes } from "../types";
+import {
+  AspectRatio,
+  CropValue,
+  DrawAction,
+  DrawActionTypes,
+  Status
+} from "../types";
 import {
   clamp,
   getNewAspectRatio,
@@ -11,10 +17,10 @@ import {
 
 export const useDrawCrop = (
   dispatch: React.Dispatch<DrawAction>,
-  onChange: (crop: CropValue) => void,
+  onChange: (crop: CropValue, status: Status) => void,
   state: State,
-  onStart?: () => void,
-  onComplete?: () => void,
+  onStart?: (status: Status) => void,
+  onComplete?: (status: Status) => void,
   minWidth?: number,
   maxWidth?: number,
   minHeight?: number,
@@ -44,15 +50,18 @@ export const useDrawCrop = (
     const y = getYPercent(event, imageRef);
 
     if (onStart) {
-      onStart();
+      onStart(Status.Drawing);
     }
 
-    onChange({
-      height: 0,
-      width: 0,
-      x,
-      y
-    });
+    // onChange(
+    //   {
+    //     height: 0,
+    //     width: 0,
+    //     x,
+    //     y
+    //   },
+    //   Status.Drawing
+    // );
 
     dispatch({
       type: DrawActionTypes.StartDraw,
@@ -104,12 +113,12 @@ export const useDrawCrop = (
       };
     }
 
-    onChange(cropValue);
+    onChange(cropValue, Status.Drawing);
   };
 
   const finishDraw = (): void => {
     if (onComplete) {
-      onComplete();
+      onComplete(Status.Drawing);
     }
 
     dispatch({ type: DrawActionTypes.FinishDraw });
